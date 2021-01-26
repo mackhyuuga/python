@@ -1,5 +1,7 @@
 import os
 from os.path import join 
+import shutil 
+
 class Folder:
     def __init__(self, path = '/'):
         self.path = path 
@@ -91,19 +93,38 @@ class Folder:
             print('formatted size:', value[3])
             print(end='\n\n')
 
+
+    def move(self, new_path, original_path = None):
+        if original_path == None:
+            original_path = self.path 
+            
+        try:
+            os.mkdir(new_path)
+        except FileExistsError as e:
+            print(f"the folder '{new_path}' already exist")
+
+        for root, dirs, files in os.walk(original_path):
+            for self.file in files:
+                old_file_path = os.path.join(root, self.file)
+                new_file_path = os.path.join(new_path, self.file)
+
+                shutil.move(old_file_path, new_file_path)
+
+        if len(self.file) > 0:
+            print(f'File {self.file} has been moved successfully ')
+        else:
+            print('no files were moved')
         
 
+if __name__ == '__main__':
 
-f1 = Folder('/home/mack/Livros')
-f1.search()
-print(f1.find('física'))
-f1.show()
+    f1 = Folder('/home/mack/Livros')
+    f1.search()
+    print(f1.find('física'))
+    f1.show()
 
-
-
-
-
-
+f2 = Folder('/home/mack/Documents/chromedriver')
+f2.move('/home/mack/Documents/test')
 
 
 
@@ -111,5 +132,4 @@ f1.show()
 
 
 
-    
 
